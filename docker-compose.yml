@@ -1,0 +1,29 @@
+version: "2"
+services:
+    www:
+        build: .
+        ports: 
+            - "8003:80"
+        volumes:
+            - ./www:/var/www/html/
+            - ./dump:/var/www/dump/
+        links:
+            - db
+        networks:
+            - default
+    db:
+        image: mysql:5.7
+        ports: 
+            - "3309:3306"
+        environment:
+            MYSQL_DATABASE: main_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: UserPassword
+            MYSQL_ROOT_PASSWORD: RootPassword
+        volumes:
+            - ./dump:/docker-entrypoint-initdb.d
+            - persistent:/var/lib/mysql
+        networks:
+            - default
+volumes:
+    persistent:
